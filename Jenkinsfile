@@ -2,9 +2,6 @@ pipeline {
     agent any  // Ejecuta en cualquier agente disponible
 
     environment {
-        // Asignar las credenciales de Docker Hub como variables de entorno
-        DOCKER_USERNAME = credentials('docker-hub-username')  // Este es el ID de la credencial que contiene tu usuario de Docker Hub
-        DOCKER_PASSWORD = credentials('docker-hub-password')  // Este es el ID de la credencial que contiene tu contraseña o token
         IMAGE_NAME = 'andrewbataan/postpython' // Reemplaza con tu nombre y nombre de la imagen
         REPO_URL = 'https://github.com/andrewbataan/PostPython.git' // URL de tu repositorio
     }
@@ -29,11 +26,9 @@ pipeline {
             steps {
                 script {
                     // Autenticación con Docker Hub usando las credenciales almacenadas
-                    docker.login(
-                        registryUrl: 'https://index.docker.io/v1/'
-                        username: "${DOCKER_USERNAME}", 
-                        password: "${DOCKER_PASSWORD}"
-                    )
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
+                        echo "Login exitoso a Docker Hub."
+                    }
                 }
             }
         }
@@ -54,6 +49,3 @@ pipeline {
         }
         failure {
             echo 'El pipeline falló'
-        }
-    }
-}
