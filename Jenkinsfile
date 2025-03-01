@@ -13,15 +13,6 @@ pipeline {
             }
         }
 
-        stage('Construir imagen Docker') {
-            steps {
-                script {
-                    // Construir la imagen Docker
-                    docker.build("${IMAGE_NAME}")  // Crea la imagen con el nombre que especificaste
-                }
-            }
-        }
-
         stage('Iniciar sesión en Docker Hub') {
             steps {
                 script {
@@ -29,6 +20,15 @@ pipeline {
                     docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
                         echo "Login exitoso a Docker Hub."
                     }
+                }
+            }
+        }
+
+        stage('Construir imagen Docker') {
+            steps {
+                script {
+                    // Construir la imagen Docker
+                    docker.build("${IMAGE_NAME}")  // Crea la imagen con el nombre que especificaste
                 }
             }
         }
@@ -52,3 +52,4 @@ pipeline {
         }
     }
 }
+
