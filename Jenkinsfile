@@ -30,6 +30,7 @@ pipeline {
                 script {
                     // Autenticación con Docker Hub usando las credenciales almacenadas
                     docker.login(
+                        registryUrl: 'https://index.docker.io/v1/'
                         username: "${DOCKER_USERNAME}", 
                         password: "${DOCKER_PASSWORD}"
                     )
