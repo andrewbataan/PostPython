@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Configuración del Docker Hub (o tu registro de Docker)
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials') // Debes configurar esto en Jenkins
-        IMAGE_NAME = 'andrewbataan/PostPython' // Reemplaza con tu nombre y nombre de la imagen
+        IMAGE_NAME = 'andrewbataan/postpython' // Reemplaza con tu nombre y nombre de la imagen
         REPO_URL = 'https://github.com/andrewbataan/PostPython.git' // URL de tu repositorio
     }
 
