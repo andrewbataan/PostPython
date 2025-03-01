@@ -1,43 +1,40 @@
 pipeline {
-    agent any  // Ejecuta en cualquier agente disponible
+    agent any  
 
     environment {
-        IMAGE_NAME = 'andrewbataan/postpython' // Reemplaza con tu nombre y nombre de la imagen
-        REPO_URL = 'https://github.com/andrewbataan/PostPython.git' // URL de tu repositorio
+        IMAGE_NAME = 'andrewbataan/postpython' 
+        REPO_URL = 'https://github.com/andrewbataan/PostPython.git' 
     }
 
     stages {
-        stage('Clonar código') {
+        stage('Clone code from git') {
             steps {
-                git branch: 'main', url: "${REPO_URL}"  // Clona el repositorio en la rama main
+                git branch: 'main', url: "${REPO_URL}"  
             }
         }
 
-        stage('Iniciar sesión en Docker Hub') {
+        stage('Login into Docker Hub') {
             steps {
                 script {
-                    // Autenticación con Docker Hub usando las credenciales almacenadas
                     docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        echo "Login exitoso a Docker Hub."
+                        echo "Login succesfully"
                     }
                 }
             }
         }
 
-        stage('Construir imagen Docker') {
+        stage('build image') {
             steps {
                 script {
-                    // Construir la imagen Docker
-                    docker.build("${IMAGE_NAME}")  // Crea la imagen con el nombre que especificaste
+                    docker.build("${IMAGE_NAME}") 
                 }
             }
         }
 
-        stage('Subir imagen a Docker Hub') {
+        stage('Upload image to docker hub') {
             steps {
                 script {
-                    // Subir la imagen al Docker Hub
-                    docker.image("${IMAGE_NAME}").push()  // Empuja la imagen al repositorio Docker Hub
+                    docker.image("${IMAGE_NAME}").push()
                 }
             }
         }
@@ -45,10 +42,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline ejecutado con éxito!'
+            echo 'Pipeline run succesfully'
         }
         failure {
-            echo 'El pipeline falló'
+            echo 'Pipeline down'
         }
     }
 }
