@@ -34,19 +34,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Subir imagen a Docker Hub') {
-            steps {
-                script {
-                    // Subir la imagen al Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS}") {
-                        docker.image("${IMAGE_NAME}").push()  // Empuja la imagen al repositorio Docker Hub
-                    }
-                }
-            }
-        }
-    }
-
+        
     post {
         success {
             echo 'Pipeline ejecutado con éxito!'
