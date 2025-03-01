@@ -27,13 +27,14 @@ pipeline {
         stage('Iniciar sesión en Docker Hub') {
             steps {
                 script {
-                    // Autenticación con Docker Hub
+                    // Autenticación con Docker Hub (si no quieres subir, no necesitas este paso)
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS}") {
                         // Este paso se ejecuta con las credenciales configuradas en Jenkins
                     }
                 }
             }
         }
+    }
 
     post {
         success {
