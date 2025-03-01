@@ -49,3 +49,6 @@ pipeline {
         }
         failure {
             echo 'El pipeline falló'
+        }
+    }
+}
