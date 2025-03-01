@@ -2,8 +2,9 @@ pipeline {
     agent any  // Ejecuta en cualquier agente disponible
 
     environment {
-        // Configuración del Docker Hub (o tu registro de Docker)
-        DOCKER_CREDENTIALS = credentials('docker-hub-credentials') // Debes configurar esto en Jenkins
+        // Asignar las credenciales de Docker Hub como variables de entorno
+        DOCKER_USERNAME = credentials('docker-hub-username')  // Este es el ID de la credencial que contiene tu usuario de Docker Hub
+        DOCKER_PASSWORD = credentials('docker-hub-password')  // Este es el ID de la credencial que contiene tu contraseña o token
         IMAGE_NAME = 'andrewbataan/postpython' // Reemplaza con tu nombre y nombre de la imagen
         REPO_URL = 'https://github.com/andrewbataan/PostPython.git' // URL de tu repositorio
     }
@@ -27,10 +28,11 @@ pipeline {
         stage('Iniciar sesión en Docker Hub') {
             steps {
                 script {
-                    // Autenticación con Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS}") {
-                        // Este paso se ejecuta con las credenciales configuradas en Jenkins
-                    }
+                    // Autenticación con Docker Hub usando las credenciales almacenadas
+                    docker.login(
+                        username: "${DOCKER_USERNAME}", 
+                        password: "${DOCKER_PASSWORD}"
+                    )
                 }
             }
         }
@@ -39,9 +41,7 @@ pipeline {
             steps {
                 script {
                     // Subir la imagen al Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS}") {
-                        docker.image("${IMAGE_NAME}").push()  // Empuja la imagen al repositorio Docker Hub
-                    }
+                    docker.image("${IMAGE_NAME}").push()  // Empuja la imagen al repositorio Docker Hub
                 }
             }
         }
